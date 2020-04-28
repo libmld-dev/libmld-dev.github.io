@@ -18,21 +18,34 @@ document.body.appendChild(renderer.domElement);
 // FUN STARTS HERE
 // ------------------------------------------------
 
-// create random vertices
-var vertices = [];
-for (var i = 0; i < 10000; i++) {
+
+
+// create random particles
+var particles = [];
+for (var i = 0; i < 1000; i++) {
+    // rand pos
     var x = THREE.MathUtils.randFloatSpread(2000);
     var y = THREE.MathUtils.randFloatSpread(2000);
     var z = THREE.MathUtils.randFloatSpread(2000);
-    vertices.push(x, y, z);
-}
 
-// add points to scene
-var geometry = new THREE.BufferGeometry();
-geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-var material = new THREE.PointsMaterial({ color: 0x888888 });
-var points = new THREE.Points(geometry, material);
-scene.add(points);
+    // create cube
+    var cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshNormalMaterial());
+    cube.position.x = x;
+    cube.position.y = y;
+    cube.position.z = z;
+
+    // save additional info
+    var particle = {
+        cubeObject: cube,
+        position:  cube.position,
+        velocity: {x: 20, y: 20, z: 20},
+        acceleration: {x: 0, y: -9.81, z: 0}
+    };
+    particles.push(particle);
+
+    // add cube to scene
+    scene.add(cube);
+}
 
 // clock for time
 var clock = new THREE.Clock();
@@ -43,9 +56,13 @@ function simpleParticle_velo() {
 
     // move all points in one direction
     // r_p = r_p + v_p * dt
-    points.position.x = points.position.x + 20 * dt;
-    points.position.y = points.position.y + 20 * dt;
-    points.position.z = points.position.z + 20 * dt;
+    for(p of particles)
+    {
+        // update pos
+        p.position.x = p.position.x + p.velocity.x * dt;
+        p.position.y = p.position.y + p.velocity.y * dt;
+        p.position.z = p.position.z + p.velocity.z * dt;
+    }
 }
 
 function simpleParticle_accel() {
@@ -53,7 +70,20 @@ function simpleParticle_accel() {
     var dt = clock.getDelta();
 
     // move all points in one direction
-    // r_p = r_p + v_p * dt + a_p * dt^2
+    // r_p = r_p + v_p * dt
+    // v_p = v_p + a_p * dt
+    for(p of particles)
+    {
+        // update velo
+        p.velocity.x = p.velocity.x + p.acceleration.x * dt;
+        p.velocity.y = p.velocity.y + p.acceleration.y * dt;
+        p.velocity.z = p.velocity.z + p.acceleration.z * dt;
+
+        // update pos
+        p.position.x = p.position.x + p.velocity.x * dt;
+        p.position.y = p.position.y + p.velocity.y * dt;
+        p.position.z = p.position.z + p.velocity.z * dt;
+    }
 }
 
 // Render Loop
