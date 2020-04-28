@@ -14,7 +14,7 @@ function findGetParameter(parameterName) {
         });
     return result;
 }
-console.log(findGetParameter("example"));
+console.log();
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -64,7 +64,11 @@ var render = function() {
     requestAnimationFrame( render );
 
     // tests:
-    simpleParticle();
+    switch(findGetParameter("example"))
+    {
+        case "0": simpleParticle(); break;
+        case "1": break;
+    }    
 
     // Render the scene
     renderer.render(scene, camera);
