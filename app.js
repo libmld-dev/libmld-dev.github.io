@@ -55,13 +55,13 @@ function simpleParticle_velo() {
     var dt = clock.getDelta();
 
     // move all points in one direction
-    // r_p = r_p + v_p * dt
+    // r_p = r_p + dt * v_p
     for(p of particles)
     {
         // update pos
-        p.position.x = p.position.x + p.velocity.x * dt;
-        p.position.y = p.position.y + p.velocity.y * dt;
-        p.position.z = p.position.z + p.velocity.z * dt;
+        p.position.x = p.position.x + dt * p.velocity.x;
+        p.position.y = p.position.y + dt * p.velocity.y;
+        p.position.z = p.position.z + dt * p.velocity.z;
     }
 }
 
@@ -70,19 +70,19 @@ function simpleParticle_accel() {
     var dt = clock.getDelta();
 
     // move all points in one direction
-    // r_p = r_p + v_p * dt
-    // v_p = v_p + a_p * dt
+    // v_p = v_p + dt * a_p
+    // r_p = r_p + dt * v_p
     for(p of particles)
     {
-        // update velo
-        p.velocity.x = p.velocity.x + p.acceleration.x * dt;
-        p.velocity.y = p.velocity.y + p.acceleration.y * dt;
-        p.velocity.z = p.velocity.z + p.acceleration.z * dt;
-
         // update pos
-        p.position.x = p.position.x + p.velocity.x * dt;
-        p.position.y = p.position.y + p.velocity.y * dt;
-        p.position.z = p.position.z + p.velocity.z * dt;
+        p.position.x = p.position.x + dt * p.velocity.x;
+        p.position.y = p.position.y + dt * p.velocity.y;
+        p.position.z = p.position.z + dt * p.velocity.z;
+
+        // update velo
+        p.velocity.x = p.velocity.x + dt * p.acceleration.x;
+        p.velocity.y = p.velocity.y + dt * p.acceleration.y;
+        p.velocity.z = p.velocity.z + dt * p.acceleration.z;
     }
 }
 
