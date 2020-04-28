@@ -34,27 +34,38 @@ var material = new THREE.PointsMaterial({ color: 0x888888 });
 var points = new THREE.Points(geometry, material);
 scene.add(points);
 
-function simpleParticle(dt) {
+// clock for time
+var clock = new THREE.Clock();
+
+function simpleParticle_velo() {
+    // get delta time
+    var dt = clock.getDelta();
+
     // move all points in one direction
     // r_p = r_p + v_p * dt
-    points.position.x += 20 * dt;
-    points.position.y += 20 * dt;
-    points.position.z += 20 * dt;
+    points.position.x = points.position.x + 20 * dt;
+    points.position.y = points.position.y + 20 * dt;
+    points.position.z = points.position.z + 20 * dt;
 }
 
-let time = 0.0;
+function simpleParticle_accel() {
+    // get delta time
+    var dt = clock.getDelta();
+
+    // move all points in one direction
+    // r_p = r_p + v_p * dt + a_p * dt^2
+}
 
 // Render Loop
-var render = function (now = 0.0) {
-    requestAnimationFrame(render);
-    const delta = time - now;
-    time = now;
+var render = function() {
+    requestAnimationFrame( render );
 
-    // tests:
-    switch (findGetParameter("example")) {
-        case "0": simpleParticle(delta); break;
-        case "1": break;
-    }
+    // examples:
+    switch(findGetParameter("example"))
+    {
+        case "0": simpleParticle_velo(); break;
+        case "1": simpleParticle_accel(); break;
+    }    
 
     // Render the scene
     renderer.render(scene, camera);
